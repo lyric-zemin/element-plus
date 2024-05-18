@@ -1,24 +1,32 @@
-import { isRef, onScopeDispose, watch } from 'vue'
-import { computed } from '@vue/reactivity'
-import { isClient } from '@vueuse/core'
+import { computed, isRef, onScopeDispose, watch } from 'vue'
 import {
   addClass,
   getScrollBarWidth,
   getStyle,
   hasClass,
+  isClient,
   removeClass,
   throwError,
 } from '@element-plus/utils'
 import { useNamespace } from '../use-namespace'
 
 import type { Ref } from 'vue'
+import type { UseNamespaceReturn } from '../use-namespace'
+
+export type UseLockScreenOptions = {
+  ns?: UseNamespaceReturn
+  // shouldLock?: MaybeRef<boolean>
+}
 
 /**
  * Hook that monitoring the ref value to lock or unlock the screen.
  * When the trigger became true, it assumes modal is now opened and vice versa.
  * @param trigger {Ref<boolean>}
  */
-export const useLockscreen = (trigger: Ref<boolean>) => {
+export const useLockscreen = (
+  trigger: Ref<boolean>,
+  options: UseLockScreenOptions = {}
+) => {
   if (!isRef(trigger)) {
     throwError(
       '[useLockscreen]',
@@ -26,7 +34,7 @@ export const useLockscreen = (trigger: Ref<boolean>) => {
     )
   }
 
-  const ns = useNamespace('popup')
+  const ns = options.ns || useNamespace('popup')
 
   const hiddenCls = computed(() => ns.bm('parent', 'hidden'))
 
