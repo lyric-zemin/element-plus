@@ -21,6 +21,7 @@
         range-separator="To"
         start-placeholder="Start year"
         end-placeholder="End year"
+        :shortcuts="shortcuts"
       />
     </div>
   </div>
@@ -31,7 +32,20 @@ import { ref } from 'vue'
 
 const value1 = ref('')
 const value2 = ref('')
+
+const shortcuts = [
+  {
+    text: 'Last 3 Year',
+    value: () => {
+      const end = new Date()
+      const start = new Date()
+      start.setFullYear(start.getFullYear() - 2)
+      return [start, end]
+    },
+  },
+]
 </script>
+
 <style scoped>
 .demo-date-picker {
   display: flex;
